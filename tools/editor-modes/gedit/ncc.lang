@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Authors: Ariel Núñez, Marco Barisione, Emanuele Aina
+
+ nesC (network embedded system C) GtkSourceview language definition
+ based on GtkSourceview C language definition.
+
+ Authors: Ariel Núñez, Marco Barisione, Emanuele Aina, Trilok Inakota
  Copyright (C) 2005-2007 Marco Barisione <barisione@gmail.com>
  Copyright (C) 2005-2007 Emanuele Aina
  Copyright (C) 2007 Ariel Núñez (Adapted to NesC the cpp.lang written by Marco and Emanuele)
+ Copyright (C) 2010,Trilok Inakota, <itrilok@gmail.com>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -17,14 +22,16 @@
 
  You should have received a copy of the GNU Library General Public
  License along with this library; if not, write to the
- Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
- Boston, MA 02110-1301 USA.
+ Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA 02111-1307, USA.
 
 -->
-<language id="nc" _name="NesC" version="2.0" _section="Sources">
+
+<language id="nesc" _name="NesC" version="2.0" _section="Sources">
     <metadata>
-      <property name="mimetypes">application/x-netcdf;text/x-chdr;text/x-csrc</property>
-      <property name="globs">*.nc</property>
+      <property name="mimetypes">text/x-nc</property>
+      <property name="globs">*.nc;*C.nc;*M.nc;*P.nc</property>
+      <property name="Wiring">-></property>
       <property name="line-comment-start">//</property>
       <property name="block-comment-start">/*</property>
       <property name="block-comment-end">*/</property>
@@ -32,54 +39,79 @@
 
     <styles>
         <style id="keyword" _name="Keyword" map-to="c:keyword"/>
-        <style id="type" _name="Data Type" map-to="c:type"/>
+        <style id="wire"    _name="Wiring"  map-to="c:preprocessor"/>
+        <style id="type"    _name="Data Type" map-to="c:type"/>
         <style id="common-defines" _name="Common Defines" map-to="c:common-defines"/>
     </styles>
 
     <definitions>
         <!-- NesC-specific stuff (i.e. stuff which is not C) -->
-        <context id="ncc-proper">
+        <context id="nesc-proper">
             <include>
-                <context id="keywords" style-ref="keyword">
-		  	<keyword>interface</keyword>
-			<keyword>norace</keyword>
-			<keyword>command</keyword>
-			<keyword>module</keyword>
-			<keyword>post</keyword>
-			<keyword>provides</keyword>
-			<keyword>components</keyword>
-			<keyword>implementation</keyword>
-			<keyword>configuration</keyword>
-			<keyword>includes</keyword>
-			<keyword>uses</keyword>
-			<keyword>call</keyword>
-			<keyword>dbg</keyword>
-			<keyword>event</keyword>
-			<keyword>task</keyword>
-			<keyword>signal</keyword>
+                <context id="keywords" style-ref="keyword" class="keyword">
+                    <keyword>false</keyword>
+                    <keyword>new</keyword>
+                    <keyword>this</keyword>
+                    <keyword>true</keyword>
+                    <keyword>using</keyword>
+
+                    <keyword>task</keyword>
+                    <keyword>post</keyword>
+                    <keyword>namespace</keyword>
+                    <keyword>event</keyword>
+                    <keyword>command</keyword>
+		
+                    <keyword>module</keyword>
+                    <keyword>implementation</keyword>
+                    <keyword>configuration</keyword>
+                    <keyword>typename</keyword>
+                    <keyword>template</keyword>
+                    <keyword>virtual</keyword>
                 </context>
 
                 <context id="types" style-ref="type">
-			<keyword>uint8_t</keyword>
-			<keyword>uint16_t</keyword>
-			<keyword>uint32_t</keyword>
-			<keyword>bool</keyword>
-			<keyword>result_t</keyword>
-			<keyword>int32_t</keyword>
-			<keyword>int16_t</keyword>
-			<keyword>int8_t</keyword>
+                    <keyword>interface</keyword>
+                    <keyword>generic</keyword>
+                    <keyword>uint8_t</keyword>
+                    <keyword>uint16_t</keyword>
+                    <keyword>uint32_t</keyword>
+                    <keyword>int8_t</keyword>
+                    <keyword>int16_t</keyword>
+                    <keyword>int32_t</keyword>
+                    <keyword>bool</keyword>
+                    <keyword>explicit</keyword>
+                    <keyword>export</keyword>
+                    <keyword>inline</keyword>
+                    <keyword>error_t</keyword>
+                    <keyword>result_t</keyword>
+                    <keyword>packet_t</keyword>
+                    <keyword>message_t</keyword>
+                    <keyword>struct</keyword>
+                    <keyword>enum</keyword>
                 </context>
 
                 <context id="common-defines" style-ref="common-defines">
-                    <keyword>__STDC__</keyword>
+		    <keyword>provides</keyword>
+                    <keyword>components</keyword>
+                    <keyword>as</keyword>
+                    <keyword>uses</keyword>
+                    <keyword>atomic</keyword>
+                </context>
+
+                <context id="wire" style-ref="wire">
+		   <start>-></start>
+		   <end></end>
+                    <include> 
+			<context ref="c:preprocessor"/>
+		    </include>
                 </context>
             </include>
         </context>
 
-        <!-- actual language definition: NesC-specific stuff plus everything from C -->
-        <context id="nc">
+        <!-- actual language definition: NesC -specific stuff plus everything from C -->
+        <context id="nesc">
             <include>
-                <context ref="ncc-proper"/>
+                <context ref="nesc-proper"/>
                 <context ref="c:c"/>
             </include>
         </context>
